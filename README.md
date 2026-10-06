@@ -8,7 +8,7 @@
 
 ![Go](https://img.shields.io/badge/Go-1.22+-00ADD8?logo=go&logoColor=white)
 ![Wails](https://img.shields.io/badge/Wails-v2-red?logo=webassembly&logoColor=white)
-![Platform](https://img.shields.io/badge/Platform-Windows%20%7C%20Linux-blue)
+![Platform](https://img.shields.io/badge/Platform-Windows%20%7C%20Linux%20%7C%20macOS-blue)
 ![License](https://img.shields.io/badge/License-MIT-green)
 [![Release](https://img.shields.io/github/v/release/owbryd/vintecinco_dl?label=Download&color=brightgreen)](https://github.com/owbryd/vintecinco_dl/releases/latest)
 
@@ -139,6 +139,45 @@ pip install yt-dlp
 
 4. The binary will be at `build/bin/vintecinco_dl`.
 
+### macOS
+
+**Prerequisites:**
+- [Go 1.22+](https://go.dev/dl/)
+- Xcode Command Line Tools (`xcode-select --install`)
+
+**Steps:**
+
+1. Clone the repository:
+```bash
+git clone https://github.com/owbryd/vintecinco_dl.git
+cd vintecinco_dl
+```
+
+2. Build the binary:
+```bash
+make mac
+```
+
+Or manually:
+```bash
+CGO_ENABLED=1 CGO_LDFLAGS="-framework UniformTypeIdentifiers" \
+  go build -tags "desktop production" -ldflags="-s -w" -o build/bin/vintecinco_dl .
+```
+
+> The `UniformTypeIdentifiers` linker flag is required on recent macOS versions; without it the build fails with `Undefined symbols: _OBJC_CLASS_$_UTType`.
+
+3. Install [yt-dlp](https://github.com/yt-dlp/yt-dlp) and [FFmpeg](https://ffmpeg.org/) with [Homebrew](https://brew.sh/):
+```bash
+brew install yt-dlp ffmpeg
+```
+
+4. The binary will be at `build/bin/vintecinco_dl`. Launch it from Terminal:
+```bash
+./build/bin/vintecinco_dl
+```
+
+> **Note:** On macOS the app does not download yt-dlp and FFmpeg automatically — they must be installed and in your `PATH`. Launch the app from Terminal so it inherits your shell's `PATH`; apps opened from Finder do not see Homebrew's `/opt/homebrew/bin`.
+
 ### Using Wails CLI (optional)
 
 If you have the [Wails CLI](https://wails.io/docs/gettingstarted/installation) installed, you can also build with:
@@ -154,6 +193,7 @@ This also enables `wails dev` for live-reload during development.
 |--------|-------------|
 | `make windows` | Build Windows `.exe` (amd64) |
 | `make linux` | Build Linux binary (amd64) |
+| `make mac` | Build macOS binary (native architecture) |
 | `make test` | Run all tests |
 | `make clean` | Remove build artifacts |
 
@@ -253,7 +293,7 @@ Thinkific uses an interactive browser login via **Google Chrome**. The app opens
 4. Complete the login in the Chrome window
 5. The app detects authentication automatically and closes the browser
 
-> **Note:** vintecinco_dl uses a dedicated Chrome profile stored at `%LOCALAPPDATA%\vintecinco_dl\chrome-profile` — separate from your personal Chrome profile, so your browsing data is never touched.
+> **Note:** vintecinco_dl uses a dedicated Chrome profile stored at `%LOCALAPPDATA%\vintecinco_dl\chrome-profile` — separate from your personal Chrome profile, so your browsing data is never touched. On Linux and macOS the profile is currently created in a `vintecinco_dl/chrome-profile` folder inside the directory you launch the app from.
 
 ## Download Folder Structure
 

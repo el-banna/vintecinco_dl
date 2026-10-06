@@ -1,4 +1,4 @@
-.PHONY: windows linux test clean
+.PHONY: windows linux mac test clean
 
 windows:
 	GOOS=windows GOARCH=amd64 go build -tags "desktop production" \
@@ -6,6 +6,10 @@ windows:
 
 linux:
 	GOOS=linux GOARCH=amd64 go build -tags "webkit2_41 desktop production" \
+		-ldflags="-s -w" -o build/bin/vintecinco_dl .
+
+mac:
+	CGO_ENABLED=1 CGO_LDFLAGS="-framework UniformTypeIdentifiers" go build -tags "desktop production" \
 		-ldflags="-s -w" -o build/bin/vintecinco_dl .
 
 test:
